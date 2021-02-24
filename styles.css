@@ -1,0 +1,54 @@
+body {
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow:hidden;
+}
+
+html {
+    min-height: 100%;
+}
+
+#cnv_container {
+  
+}
+
+.button {
+  position: absolute;
+  top: 2vh;
+  left: 5vw;
+  padding: 1vmax;
+  font-size: 2.3vmax;
+  width: 10vmax;
+  background-color: rgb(208, 165, 37);
+  border: none;
+  color: var(--body-color);
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  margin: 1em 0em;
+  cursor: pointer;
+  border-radius: 1vmax;
+  user-select: none;
+  outline: none;
+  box-shadow: 0 0.5vmax rgb(221, 221, 221);
+  z-index: 2;
+}
+.button:active {
+  box-shadow: 0 0.3vmax rgb(102, 102, 102);
+  transform: translateY(4px);
+}
+
+a {
+  text-decoration: none;
+  color: rgb(208, 165, 37);
+}
+
+footer {
+  position: absolute;
+  top: 89vh;
+  left: 5vw;
+  font-size: 1.3vw;
+  z-index: 2;
+  color: rgb(177, 177, 177);
+}
