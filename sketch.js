@@ -1,102 +1,321 @@
-/* Generative art sketch: a colorful N-Möbius strip
+/* Una simulación sencilla del proceso de invasión de Nicotiana glauca en un ecosistema de cardones y tabaibas desarrollada para alumnado de 4º de ESO.
    Semidan Robaina Estevez
 */
 
-let suelo, glauca, cardon, tabaiba, plantImg;
-let squarePositions = [];
+let suelo, glauca, cardon, tabaiba, plantImg, images;
+let gridElements = [];
 let plants = [];
+let plantTypeData = {glauca: [], tabaiba: [], cardon: []};
 let squareSideLength;
-const squaresPerSide = 10;
+let numberOfSquares;
+const squaresPerSide = 20;
 let screenTouched = false;
 
-const n_init_suelo = 60;
-const n_init_glauca = 6;
-const n_init_cardon = 15;
-const n_init_tabaiba = 15;
-
-const glauca_fitness = 1;
+const n_plants_init = {
+  glauca: 1,
+  cardon: 5,
+  tabaiba: 5
+};
 
 function preload() {
   suelo = loadImage("imgs/suelo.png");
   glauca = loadImage("imgs/glauca.png");
   cardon = loadImage("imgs/cardon.png");
   tabaiba = loadImage("imgs/tabaiba.png");
+  // images = {suelo: suelo, glauca: glauca, cardon: cardon, tabaiba:tabaiba};
 }
 
+let plantParameters = {
+  glauca: {
+    energy_gain_rate: 0.25,
+    reproductive_energy_threshold: 2,
+    max_life: 15,
+    life_dev: 5,
+    seed_success: 0.01,
+    max_seed_production: 300,
+    seed_production_dev: 10,
+    max_seed_dispersal: 2,
+    toxicity_to_neighbors: 0.005,
+    life_loss_rate: 1,
+  },
+  cardon: {
+    energy_gain_rate: 0.20,
+    reproductive_energy_threshold: 3,
+    max_life: 20,
+    life_dev: 5,
+    seed_success: 0.01,
+    max_seed_production: 100,
+    seed_production_dev: 10,
+    max_seed_dispersal: 5,
+    toxicity_to_neighbors: 0.005,
+    life_loss_rate: 1,
+  },
+  tabaiba: {
+    energy_gain_rate: 0.18,
+    reproductive_energy_threshold: 2,
+    max_life: 20,
+    life_dev: 5,
+    seed_success: 0.01,
+    max_seed_production: 200,
+    seed_production_dev: 10,
+    max_seed_dispersal: 2,
+    toxicity_to_neighbors: 0.005,
+    life_loss_rate: 1,
+  },
+  suelo: {
+    energy_gain_rate: 0.25,
+    reproductive_energy_threshold: 2,
+    max_life: 20,
+    life_dev: 5,
+    seed_success: 0.01,
+    max_seed_production: 100,
+    seed_production_dev: 10,
+    max_seed_dispersal: 0,
+    toxicity_to_neighbors: 0.005,
+    life_loss_rate: 1,
+  }
+};
+
 function setup() {
-  const canvasSideLength = min(windowWidth, windowHeight);
-  const numberOfSquares = squaresPerSide ** 2;
+  images = {suelo: suelo, glauca: glauca, cardon: cardon, tabaiba:tabaiba};
+
+  let canvasSideLength = min(windowWidth, windowHeight);
+  canvasSideLength = 600;
+
+  numberOfSquares = squaresPerSide ** 2;
   squareSideLength = canvasSideLength / squaresPerSide;
-  const offset = 0; //squareSideLength / 2;
+
   let cnv = createCanvas(canvasSideLength, canvasSideLength);
   cnv.parent('cnv_container');
-  frameRate(30);
-  noLoop();
-  rectMode(CENTER);
+  frameRate(4);
 
   for (let i = 0; i < (squaresPerSide - 0); i++) {
     for (let j = 0; j < (squaresPerSide - 0); j++) {
-      squarePositions.push({
-        x: offset + i * squareSideLength,
-        y: offset + j * squareSideLength
+      gridElements.push({
+        x: i * squareSideLength,
+        y: j * squareSideLength,
+        coord: [i, j],
       });
     }
   }
 
-
   for (let n = 0; n < numberOfSquares; n++) {
-    let randInt = Math.floor(Math.random() * 75);
-    let plantPos = squarePositions[n];
-    if (randInt < 25) {
-      plantImg = suelo;
-    } else if (randInt >= 25 & randInt < 50) {
-      plantImg = cardon;
-    } else if (randInt >= 50 & randInt < 75) {
-      plantImg = tabaiba;
+    let plantPos = gridElements[n];
+    plants[n] = new Plant(id="suelo", img=images["suelo"], pos=plantPos,
+      plantParameters["suelo"]);
+  }
+
+  // populate grid with seed plants
+  let plantIDs = ["cardon", "tabaiba", "glauca"];
+  for (let plantID of plantIDs) {
+    let randSample = getRandomSample(
+      0, numberOfSquares, n_plants_init[plantID]);
+    for (rand_idx of randSample) {
+      plants[rand_idx].id = plantID;
+      plants[rand_idx].img = images[plantID];
+      plants[rand_idx].p = plantParameters[plantID];
     }
-    plants[n] = new Plant(id=n, pos=plantPos, img=plantImg, fitness=1);
   }
 
-  let randSample = getRandomSample(0, numberOfSquares, n_init_glauca);
-  for (rand_id of randSample) {
-    plants[rand_id].img = glauca;
-    plants[rand_id].fitness = glauca_fitness;
+  for (plant of plants) {
+    plant.initialize();
   }
 
-
-};
+}
 
 function draw() {
   background('black');
+  for (plant of plants) {
+    plant.updateState();
+    if (plant.id !== "suelo" & plant.reproduce === true) {
+      reproducePlant(plant);
+    }
+  }
 
   for (plant of plants) {
     plant.show();
-  };
+  }
+
+  let plant_type_count = countPlantTypes(plants);
+  plantTypeData.glauca.push(plant_type_count.glauca);
+  plantTypeData.cardon.push(plant_type_count.cardon);
+  plantTypeData.tabaiba.push(plant_type_count.tabaiba);
+  plotDataFraction(plantTypeData);
+
+  if (plant_type_count.glauca === numberOfSquares) {
+    noLoop();
+  }
 
 }
 
-class Plant {
 
-  constructor(id, pos, img, fitness) {
+class Plant {
+  constructor(id, img, pos, params) {
     this.id = id;
-    this.pos = pos;
     this.img = img;
-    this.fitness = fitness;
+    this.pos = pos;
+    this.p = params;
+    this.energy = 0;
+    this.life = 0;
+    this.seeds = 0;
+    this.reproduce = false;
+  }
+
+  initialize() {
+    this.life = getRandomInt(this.p.max_life - this.p.life_dev, this.p.max_life + this.p.life_dev);
+    this.energy = 0;
+    this.seeds = 0;
+    this.reproduce = false;
+  }
+
+  updateState() {
+    this.energy += this.p.energy_gain_rate;
+    if (this.life <= 0) {
+      this.img = suelo;
+      this.id = "suelo";
+      this.seeds = 0;
+      this.energy = 0;
+      this.p = plantParameters["suelo"];
+    }
+    if (this.energy >= this.p.reproductive_energy_threshold) {
+      this.seeds = getRandomInt(this.p.max_seed_production - this.p.seed_production_dev, this.p.max_seed_production + this.p.seed_production_dev);
+      this.energy = 0;
+    }
+    if (Math.round(this.seeds * this.p.seed_success) > 0) {
+      this.reproduce = true;
+    } else {
+      this.reproduce = false;
+    }
+    this.life -= this.p.life_loss_rate;
   }
 
   show() {
-    image(this.img, this.pos.x, this.pos.y, squareSideLength, squareSideLength);
+    image(
+      this.img, this.pos.x, this.pos.y, squareSideLength, squareSideLength);
   }
 
 }
 
-// helper functions
-function updateScreenEvent() {
-  screenTouched = !screenTouched;
-  button.innerHTML = "Pause";
-  if (!screenTouched) {
+function reproducePlant(plant) {
+
+  let available_spots = plants.filter(
+    spot => (spot.id === "suelo") & (computeDistance(spot.pos.coord, plant.pos.coord) <= plant.p.max_seed_dispersal)
+  );
+
+  if (available_spots.length > 0) {
+    let successful_seeds = Math.round(plant.seeds * plant.p.seed_success);
+    let random_idxs = getRandomSample(0, available_spots.length - 1,
+      Math.min(available_spots.length, successful_seeds));
+    for (let i=0; i<random_idxs.length; i++) {
+      available_spots[i].id = plant.id;
+      available_spots[i].img = plant.img;
+      available_spots[i].p = plantParameters[plant.id];
+      available_spots[i].initialize();
+    }
+  }
+  // Plant gets depleted of seeds and energy once reproduces
+  plant.reproduce = false;
+  plant.seeds = 0;
+}
+
+function computeDistance([a, b], [c, d]) {
+  return Math.max(Math.abs(a - c), Math.abs(b - d))
+}
+
+function countPlantTypes(plants) {
+  let plant_types = {glauca:0, tabaiba:0, cardon:0};
+  for (plant of plants) {
+    if (plant.id === "glauca") {
+      plant_types.glauca += 1;
+    } else if (plant.id === "cardon") {
+      plant_types.cardon += 1;
+    } else if (plant.id === "tabaiba") {
+      plant_types.tabaiba += 1;
+    }
+  }
+  return plant_types
+}
+
+function plotDataFraction(data) {
+
+  let plant_fraction = {glauca:[], tabaiba:[], cardon:[]};
+  for (let i=0; i<data.glauca.length; i++) {
+     let total = data.glauca[i] + data.tabaiba[i] + data.cardon[i];
+     plant_fraction.glauca.push(100 * (data.glauca[i]/total));
+     plant_fraction.tabaiba.push(100 * (data.tabaiba[i]/total));
+     plant_fraction.cardon.push(100 * (data.cardon[i]/total));
+  }
+  let x_array = [...Array(data.glauca.length).keys()];
+
+  let glauca_fraction = {
+    x: x_array,
+    y: plant_fraction.glauca,
+    name: "Tabaco moro",
+    showlegend: true,
+    line: {
+      color: "rgb(219, 185, 5)"
+    }
+  };
+  let cardon_fraction = {
+    x: x_array,
+    y: plant_fraction.cardon,
+    name: "Cardón",
+    showlegend: true,
+    line: {
+      color: "rgb(8, 184, 10)"
+    }
+  };
+  let tabaiba_fraction = {
+    x: x_array,
+    y: plant_fraction.tabaiba,
+    name: "Tabaiba",
+    showlegend: true,
+    line: {
+      color: "rgb(227, 44, 177)"
+    }
+  };
+
+  plot_data = [glauca_fraction, cardon_fraction, tabaiba_fraction];
+
+  let layout = {
+	 title: `Evolución de poblaciones`,
+   mode: "lines",
+   // font: {
+   //   color: fontColor
+   // },
+   xaxis: {
+     title: "Tiempo"
+     // tickfont: {
+     //   size: 10
+     // }
+   },
+   yaxis: {title: "%"},
+   // plot_bgcolor: backgroundColor,
+   // paper_bgcolor: backgroundColor,
+   legend: {
+    x: 1,
+    xanchor: 'right',
+    y: 1
+   },
+   // margin: {
+   //   l: 0,
+   //   t: 0,
+   //   b: 0
+   // }
+  };
+  let config = {responsive: true};
+  Plotly.newPlot("plot_container", plot_data, layout);//, config);
+}
+
+let started = false;
+function startSimulation() {
+  let button = document.getElementById("start-button");
+  started = !started;
+  if (!started) {
+    button.innerHTML = "Pause";
     button.style['background-color'] = "rgb(208, 165, 37)";
   } else {
+    button.innerHTML = "Start";
     button.style['background-color'] = "rgb(120, 120, 120)";
   }
 }
@@ -104,6 +323,10 @@ function updateScreenEvent() {
 function updateSize(){
   resizeCanvas(windowWidth, windowHeight);
   fullscreen();
+}
+
+function getRandomInt(min, max) {
+  return Math.floor((max - min) * Math.random() + min);
 }
 
 function getRandomSample(minInt, maxInt, size) {
