@@ -5,11 +5,14 @@
 let suelo, glauca, cardon, tabaiba, plantImg, images;
 let gridElements = [];
 let plants = [];
-let plantTypeData = {glauca: [], tabaiba: [], cardon: []};
+let plantTypeData;
 let squareSideLength;
 let numberOfSquares;
 const squaresPerSide = 20;
-let screenTouched = false;
+let canvasSideLength = document.getElementById("cnv_container").offsetWidth;
+
+let sim_started = false;
+let sim_reseted = false;
 
 const n_plants_init = {
   glauca: 1,
@@ -78,10 +81,7 @@ let plantParameters = {
 
 function setup() {
   images = {suelo: suelo, glauca: glauca, cardon: cardon, tabaiba:tabaiba};
-
-  let canvasSideLength = min(windowWidth, windowHeight);
-  canvasSideLength = 600;
-
+  plantTypeData = {glauca: [], tabaiba: [], cardon: []};
   numberOfSquares = squaresPerSide ** 2;
   squareSideLength = canvasSideLength / squaresPerSide;
 
@@ -119,31 +119,39 @@ function setup() {
 
   for (plant of plants) {
     plant.initialize();
+    plant.show();
   }
+
+  plotDataFraction(plantTypeData);
 
 }
 
 function draw() {
-  background('black');
-  for (plant of plants) {
-    plant.updateState();
-    if (plant.id !== "suelo" & plant.reproduce === true) {
-      reproducePlant(plant);
+
+  if (!sim_started) {
+
+  } else {
+    background('black');
+    for (plant of plants) {
+      plant.updateState();
+      if (plant.id !== "suelo" & plant.reproduce === true) {
+        reproducePlant(plant);
+      }
     }
-  }
 
-  for (plant of plants) {
-    plant.show();
-  }
+    for (plant of plants) {
+      plant.show();
+    }
 
-  let plant_type_count = countPlantTypes(plants);
-  plantTypeData.glauca.push(plant_type_count.glauca);
-  plantTypeData.cardon.push(plant_type_count.cardon);
-  plantTypeData.tabaiba.push(plant_type_count.tabaiba);
-  plotDataFraction(plantTypeData);
+    let plant_type_count = countPlantTypes(plants);
+    plantTypeData.glauca.push(plant_type_count.glauca);
+    plantTypeData.cardon.push(plant_type_count.cardon);
+    plantTypeData.tabaiba.push(plant_type_count.tabaiba);
+    plotDataFraction(plantTypeData);
 
-  if (plant_type_count.glauca === numberOfSquares) {
-    noLoop();
+    if (plant_type_count.glauca === numberOfSquares) {
+      noLoop();
+    }
   }
 
 }
@@ -307,17 +315,20 @@ function plotDataFraction(data) {
   Plotly.newPlot("plot_container", plot_data, layout);//, config);
 }
 
-let started = false;
 function startSimulation() {
   let button = document.getElementById("start-button");
-  started = !started;
-  if (!started) {
+  sim_started = !sim_started;
+  if (!sim_started) {
     button.innerHTML = "Pause";
     button.style['background-color'] = "rgb(208, 165, 37)";
   } else {
     button.innerHTML = "Start";
     button.style['background-color'] = "rgb(120, 120, 120)";
   }
+}
+
+function resetSimulation() {
+  setup();
 }
 
 function updateSize(){

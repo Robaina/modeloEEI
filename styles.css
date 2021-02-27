@@ -1,3 +1,7 @@
+:root{
+  --canvasSideLength: 40vw;
+}
+
 body {
     min-height: 100%;
     margin: 0;
@@ -30,7 +34,7 @@ html {
   align-items: center;
   justify-content: center;
   width: 100vw;
-  height: 400px;
+  height: 200px;
   margin-left: 0vw;
   margin-bottom: 5vh;
   text-align: center;
@@ -45,8 +49,17 @@ html {
 }
 
 #cnv_container {
-
+  width: var(--canvasSideLength);
+  height: var(--canvasSideLength);
+  margin-left: calc((100vw - var(--canvasSideLength)) / 2);
 }
+
+#plot_container {
+  width: var(--canvasSideLength);
+  height: auto;
+  margin-left: calc((100vw - var(--canvasSideLength)) / 2);
+}
+
 
 .button {
   /* position: absolute;
