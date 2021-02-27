@@ -10,23 +10,13 @@ let squareSideLength;
 let numberOfSquares;
 const squaresPerSide = 20;
 let canvasSideLength = document.getElementById("cnv_container").offsetWidth;
+let sim_started, sim_reseted;
 
-let sim_started = false;
-let sim_reseted = false;
-
-const n_plants_init = {
+let n_plants_init = {
   glauca: 1,
   cardon: 5,
   tabaiba: 5
 };
-
-function preload() {
-  suelo = loadImage("imgs/suelo.png");
-  glauca = loadImage("imgs/glauca.png");
-  cardon = loadImage("imgs/cardon.png");
-  tabaiba = loadImage("imgs/tabaiba.png");
-  // images = {suelo: suelo, glauca: glauca, cardon: cardon, tabaiba:tabaiba};
-}
 
 let plantParameters = {
   glauca: {
@@ -79,6 +69,13 @@ let plantParameters = {
   }
 };
 
+function preload() {
+  suelo = loadImage("imgs/suelo.png");
+  glauca = loadImage("imgs/glauca.png");
+  cardon = loadImage("imgs/cardon.png");
+  tabaiba = loadImage("imgs/tabaiba.png");
+}
+
 function setup() {
   images = {suelo: suelo, glauca: glauca, cardon: cardon, tabaiba:tabaiba};
   plantTypeData = {glauca: [], tabaiba: [], cardon: []};
@@ -122,14 +119,17 @@ function setup() {
     plant.show();
   }
 
+  // Initialize interface
+  setSliderDefaultValues();
   plotDataFraction(plantTypeData);
+  sim_started = false;
+  sim_reseted = false;
 
 }
 
 function draw() {
 
   if (!sim_started) {
-
   } else {
     background('black');
     for (plant of plants) {
@@ -315,6 +315,7 @@ function plotDataFraction(data) {
   Plotly.newPlot("plot_container", plot_data, layout);//, config);
 }
 
+// CONTROLS
 function startSimulation() {
   let button = document.getElementById("start-button");
   sim_started = !sim_started;
@@ -331,10 +332,41 @@ function resetSimulation() {
   setup();
 }
 
-function updateSize(){
-  resizeCanvas(windowWidth, windowHeight);
-  fullscreen();
+function setSliderDefaultValues() {
+  document.getElementById('ninit_slider_text').innerHTML = n_plants_init.glauca;
+  document.getElementById('dispersal_slider_text').innerHTML = plantParameters.glauca.max_seed_dispersal;
+  document.getElementById('seed_production_slider_text').innerHTML = plantParameters.glauca.max_seed_production;
+  document.getElementById('rep_eficiency_slider_text').innerHTML = plantParameters.glauca.energy_gain_rate;
 }
+
+function updateNinitSliderText(value) {
+  document.getElementById('ninit_slider_text').innerHTML = value;
+  n_plants_init.glauca = value;
+  resetSimulation();
+}
+
+function updateDispersalSliderText(value) {
+  document.getElementById('dispersal_slider_text').innerHTML = value;
+  plantParameters.glauca.max_seed_dispersal = value;
+  resetSimulation();
+}
+
+function updateSeedProductionSliderText(value) {
+  document.getElementById('seed_production_slider_text').innerHTML = value;
+  plantParameters.glauca.max_seed_production = value;
+  resetSimulation();
+}
+
+function updateRepEficiencySliderText(value) {
+  document.getElementById('rep_eficiency_slider_text').innerHTML = value;
+  plantParameters.glauca.energy_gain_rate = value;
+  resetSimulation();
+}
+
+// function updateSize(){
+//   resizeCanvas(windowWidth, windowHeight);
+//   fullscreen();
+// }
 
 function getRandomInt(min, max) {
   return Math.floor((max - min) * Math.random() + min);

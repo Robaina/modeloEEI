@@ -28,6 +28,35 @@
 	<div id="cnv_container"></div>
   <div id="plot_container"></div>
 
+	<div id="controls_container">
+
+	  <div class="slider_container">
+			<div class="slider_name">N<sub>init</sub></div>
+			<input class="slider" id="ninit_slider" type="range" min="0" max="10" value="1" step="1" onchange="updateNinitSliderText(this.value);">
+			<div class="slider_value" id="ninit_slider_text">1</div>
+	  </div>
+
+		<div class="slider_container">
+	    <div class="slider_name">Dispersión máxima</div>
+		  <input class="slider" id="dispersal_slider" type="range" min="1" max="10" value="1" step="1" onchange="updateDispersalSliderText(this.value);">
+			<div class="slider_value" id="dispersal_slider_text">1</div>
+		</div>
+
+    <div class="slider_container">
+	    <div class="slider_name">Producción Máxima Semillas</div>
+			<input class="slider" id="seed_production_slider" type="range" min="100" max="500" value="200" step="100" onchange="updateSeedProductionSliderText(this.value);">
+			<div class="slider_value" id="seed_production_slider_text">200</div>
+		</div>
+
+    <div class="slider_container">
+	    <div class="slider_name">Eficiencia reproductiva</div>
+			<input class="slider" id="rep_eficiency_slider" type="range" min="0" max="1" value="0.1" step="0.05" onchange="updateRepEficiencySliderText(this.value);">
+			<div class="slider_value" id="rep_eficiency_slider_text">0.1</div>
+		</div>
+
+  </div>
+
+
 	<button class="button" id="start-button" onclick="startSimulation()">Start</button>
 	<button class="button" id="reset-button" onclick="resetSimulation()">Reset</button>
 	<!-- <button class="button" id="start-button">Start</button> -->
