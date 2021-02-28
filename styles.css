@@ -3,7 +3,7 @@
   --plotWidth: 55vw;
   --backgroundColor: rgb(8, 8, 8);
     --fontColor: rgb(251, 251, 251);
-  --fancyColor: #0b98d9;
+  --fancyColor: rgb(238, 157, 0);
 }
 
 body {
@@ -72,6 +72,7 @@ html {
 
 #controls_container {
   display: inline-block;
+  margin-top: 0vw;
 }
 
 #button-controls {
@@ -153,11 +154,11 @@ a {
 
 footer {
   position: absolute;
-  top: 89vh;
-  left: 5vw;
+  top: 93vh;
+  left: 40vw;
   font-size: 1.3vw;
   z-index: 2;
-  color: rgb(177, 177, 177);
+  color: var(--fontColor);
 }
 
 ::-webkit-scrollbar {
@@ -182,6 +183,12 @@ footer {
 
   #title-container {
     height: 150px;
+  }
+  #title {
+    font-size: 2em;
+  }
+  .centering_container {
+    display: inline;
   }
 
   :root {
