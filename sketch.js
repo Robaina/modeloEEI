@@ -10,6 +10,10 @@ let squareSideLength;
 let numberOfSquares;
 const squaresPerSide = 20;
 let canvasSideLength = document.getElementById("cnv_container").offsetWidth;
+const backgroundColor = getComputedStyle(document.documentElement)
+    .getPropertyValue("--backgroundColor");
+const fontColor = getComputedStyle(document.documentElement)
+    .getPropertyValue("--fontColor");
 let sim_started, sim_reseted;
 
 let n_plants_init = {
@@ -288,18 +292,18 @@ function plotDataFraction(data) {
   let layout = {
 	 title: `Evolución de poblaciones`,
    mode: "lines",
-   // font: {
-   //   color: fontColor
-   // },
+   font: {
+     color: fontColor
+   },
    xaxis: {
      title: "Tiempo"
      // tickfont: {
      //   size: 10
      // }
    },
-   yaxis: {title: "%"},
-   // plot_bgcolor: backgroundColor,
-   // paper_bgcolor: backgroundColor,
+   yaxis: {title: "Frecuencia (%)"},
+   plot_bgcolor: backgroundColor,
+   paper_bgcolor: backgroundColor,
    legend: {
     x: 1,
     xanchor: 'right',
@@ -318,17 +322,18 @@ function plotDataFraction(data) {
 // CONTROLS
 function startSimulation() {
   let button = document.getElementById("start-button");
-  sim_started = !sim_started;
+  // sim_started = !sim_started;
   if (!sim_started) {
-    button.innerHTML = "Pause";
-    button.style['background-color'] = "rgb(208, 165, 37)";
+    button.innerHTML = "<i class='fas fa-pause'></i>";
   } else {
-    button.innerHTML = "Start";
-    button.style['background-color'] = "rgb(120, 120, 120)";
+    button.innerHTML = "<i class='fas fa-play'></i>";
   }
+  sim_started = !sim_started;
 }
 
 function resetSimulation() {
+  let button = document.getElementById("start-button");
+  button.innerHTML = "<i class='fas fa-play'></i>";
   setup();
 }
 
@@ -365,7 +370,6 @@ function updateRepEficiencySliderText(value) {
 
 // function updateSize(){
 //   resizeCanvas(windowWidth, windowHeight);
-//   fullscreen();
 // }
 
 function getRandomInt(min, max) {

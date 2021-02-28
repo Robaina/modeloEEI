@@ -1,12 +1,18 @@
 :root{
   --canvasSideLength: 40vw;
+  --plotWidth: 55vw;
+  --backgroundColor: rgb(8, 8, 8);
+    --fontColor: rgb(251, 251, 251);
+  --fancyColor: #0b98d9;
 }
 
 body {
     min-height: 100%;
     margin: 0;
     padding: 0;
-    /* overflow:hidden; */
+    background-color: var(--backgroundColor);
+    color: var(--fontColor);
+    overflow-x:hidden;
 }
 
 html {
@@ -20,14 +26,16 @@ html {
   background-image: url("imgs/cardo-tabaibal.jpg");
 }
 
-/* .centering_container {
+.centering_container {
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   width: 100%;
   height: 100%;
-} */
+  margin: 1vw;
+  margin-bottom: 0vw;
+}
 
 #title-container {
   display: flex;
@@ -36,12 +44,12 @@ html {
   width: 100vw;
   height: 200px;
   margin-left: 0vw;
-  margin-bottom: 5vh;
+  margin-bottom: 0px;
   text-align: center;
 }
 
 #title {
-  font-size: 5em;
+  font-size: 4.5em;
   text-shadow: 4px 4px 12px black;
   font-family: 'Anton', sans-serif;
   color: white;
@@ -49,18 +57,41 @@ html {
 }
 
 #cnv_container {
+  display: inline-block;
   width: var(--canvasSideLength);
   height: var(--canvasSideLength);
-  margin-left: calc((100vw - var(--canvasSideLength)) / 2);
+  /* margin-left: calc((100vw - var(--canvasSideLength)) / 2); */
 }
 
 #plot_container {
-  width: var(--canvasSideLength);
+  display: inline-block;
+  width: var(--plotWidth);
   height: auto;
-  margin-left: calc((100vw - var(--canvasSideLength)) / 2);
+  /* margin-left: calc((100vw - var(--canvasSideLength)) / 2); */
+}
+
+#controls_container {
+  display: inline-block;
+}
+
+#button-controls {
+  transform: translateY(-30%);
+}
+
+.plot_controls_container {
+  width: var(--plotWidth);
+}
+
+.control_group {
+  display: inline-block;
+}
+
+.slider_container {
+  margin: 2vw;
 }
 
 .slider {
+  width: 10vw;
   /* -webkit-appearance: none;
   width: 100%;
   height: 15px;
@@ -72,26 +103,42 @@ html {
   transition: opacity .2s; */
 }
 
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  background: var(--fancyColor);
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  background: var(--fancyColor);
+  cursor: pointer;
+}
 
 .button {
   /* position: absolute;
   top: 2vh;
   left: 5vw; */
-  padding: 1vmax;
-  font-size: 2.3vmax;
-  width: 10vmax;
-  background-color: rgb(208, 165, 37);
+  /* padding: 1vmax; */
+  margin-bottom: 1vw;
+  font-size: 1.2em;
+  width: 4vw;;
+  height: 4vw;
+  background-color: var(--fancyColor);
   border: none;
-  color: var(--body-color);
+  color: var(--fontColor);
   text-align: center;
   text-decoration: none;
   display: block;
-  margin: 1em 0em;
   cursor: pointer;
-  border-radius: 1vmax;
+  border-radius: 50%;
   user-select: none;
   outline: none;
-  box-shadow: 0 0.5vmax rgb(221, 221, 221);
+  box-shadow: 0 0.2vmax rgb(221, 221, 221);
   z-index: 2;
 }
 .button:active {
@@ -101,7 +148,7 @@ html {
 
 a {
   text-decoration: none;
-  color: rgb(208, 165, 37);
+  color: var(--fancyColor);
 }
 
 footer {
@@ -111,4 +158,34 @@ footer {
   font-size: 1.3vw;
   z-index: 2;
   color: rgb(177, 177, 177);
+}
+
+::-webkit-scrollbar {
+  width: 0.5vw;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 0.25vw grey;
+  border-radius: 0.5vw;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--fancyColor);
+  border-radius: 0.5vw;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--fancyColor);
+}
+
+@media only screen and (max-width: 400px) {
+
+  #title-container {
+    height: 150px;
+  }
+
+  :root {
+    --canvasSideLength: 100vw;
+  }
+
 }
