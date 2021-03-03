@@ -13,6 +13,7 @@ body {
     background-color: var(--backgroundColor);
     color: var(--fontColor);
     overflow-x:hidden;
+    /* overflow-y: hidden; */
 }
 
 html {
@@ -159,6 +160,16 @@ footer {
   font-size: 1.3em;
   z-index: 2;
   color: var(--fontColor);
+  margin-top: 0vh;
+}
+
+footer > p {
+  margin-top: 0vh;
+}
+
+#footer_container {
+  margin-bottom: 0vh;
+  margin-top: 0vh;
 }
 
 ::-webkit-scrollbar {
@@ -218,6 +229,11 @@ footer {
 
   footer {
     font-size: 1em;
+  }
+
+  #plot_container {
+    height: auto;
+    /* max-height: calc(0.75 * var(--canvasSideLength)); */
   }
 
 }

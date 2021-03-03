@@ -37,13 +37,13 @@ let plantParameters = {
   },
   cardon: {
     energy_gain_rate: 0.20,
-    reproductive_energy_threshold: 3,
+    reproductive_energy_threshold: 2.1,
     max_life: 20,
     life_dev: 5,
     seed_success: 0.01,
-    max_seed_production: 100,
+    max_seed_production: 150,
     seed_production_dev: 10,
-    max_seed_dispersal: 5,
+    max_seed_dispersal: 2,
     toxicity_to_neighbors: 0.005,
     life_loss_rate: 1,
   },
@@ -310,7 +310,8 @@ function plotDataFraction(data) {
     y: 1
    },
    // margin: {
-   //   l: 0,
+   //   l: 0.5,
+     // r: 2
    //   t: 0,
    //   b: 0
    // }
