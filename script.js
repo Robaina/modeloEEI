@@ -1,5 +1,5 @@
 /* Una simulación sencilla del proceso de invasión de Nicotiana glauca en un ecosistema de cardones y tabaibas desarrollada para alumnado de 4º de ESO.
-   Semidan Robaina Estevez
+   Semidan Robaina Estevez, 2021
 */
 
 let suelo, glauca, cardon, tabaiba, plantImg, images;
@@ -26,7 +26,7 @@ let plantParameters = {
   glauca: {
     energy_gain_rate: 0.25,
     reproductive_energy_threshold: 2,
-    max_life: 15,
+    max_life: 20,
     life_dev: 5,
     seed_success: 0.01,
     max_seed_production: 300,
@@ -190,7 +190,10 @@ class Plant {
       this.p = plantParameters["suelo"];
     }
     if (this.energy >= this.p.reproductive_energy_threshold) {
-      this.seeds = getRandomInt(this.p.max_seed_production - this.p.seed_production_dev, this.p.max_seed_production + this.p.seed_production_dev);
+      this.seeds = getRandomInt(
+        this.p.max_seed_production - this.p.seed_production_dev, 
+        this.p.max_seed_production + this.p.seed_production_dev
+        );
       this.energy = 0;
     }
     if (Math.round(this.seeds * this.p.seed_success) > 0) {

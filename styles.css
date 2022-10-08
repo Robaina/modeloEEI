@@ -1,5 +1,5 @@
 :root{
-  --canvasSideLength: 38vw;
+  --canvasSideLength: 34vw;
   --plotWidth: 55vw;
   --backgroundColor: rgb(8, 8, 8);
     --fontColor: rgb(251, 251, 251);
@@ -43,9 +43,9 @@ html {
   align-items: center;
   justify-content: center;
   width: 100vw;
-  height: 200px;
+  height: 150px;
   margin-left: 0vw;
-  margin-bottom: 0px;
+  margin-bottom: 50px;
   text-align: center;
 }
 
