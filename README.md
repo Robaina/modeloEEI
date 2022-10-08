@@ -1,5 +1,7 @@
 # Un modelo de Especies Exóticas Invasoras en Canarias
 
+[![DOI](https://zenodo.org/badge/341976429.svg)](https://zenodo.org/badge/latestdoi/341976429)
+
 <img style="margin:0px auto;display:block" src="/imgs/presentacion.png" alt="Responsive image" width=450>
 <p></p>
 
@@ -18,3 +20,6 @@ El modelo sigue una serie de reglas sencillas:
 A medida que pasa el tiempo, las plantas de tabaiba, cardón y tabaco moro compiten por ocupar casillas con el estado suelo. La eficacia de esta competición dependerá de la combinación de parámetros que tenga cada especie, los cuales, de una forma simplificada, modelizan la capacidad invasora de la especie.
 
 Para facilitar la interpretación de los datos, la aplicación web también cuenta con una gráfica que muestra la evolución temporal de las poblaciones de cada especie de planta en la cuadrícula (en forma de fracción sobre el total). Además, la aplicación dispone de cuatro controladores, en forma de “sliders”, para modificar cómodamente (pensado para ser usado en dispositivos táctiles) el valor de los cuatro parámetros que el alumnado puede controlar.
+
+## Acceso a la aplicación
+https://semidanrobaina.com/modeloEEI/
