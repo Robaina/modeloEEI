@@ -15,6 +15,7 @@ const backgroundColor = getComputedStyle(document.documentElement)
 const fontColor = getComputedStyle(document.documentElement)
     .getPropertyValue("--fontColor");
 let sim_started, sim_reseted;
+let initialized = false;
 
 let n_plants_init = {
   glauca: 1,
@@ -37,19 +38,19 @@ let plantParameters = {
   },
   cardon: {
     energy_gain_rate: 0.20,
-    reproductive_energy_threshold: 2.1,
+    reproductive_energy_threshold: 2,
     max_life: 20,
     life_dev: 5,
     seed_success: 0.01,
-    max_seed_production: 150,
+    max_seed_production: 200,
     seed_production_dev: 10,
     max_seed_dispersal: 2,
     toxicity_to_neighbors: 0.005,
     life_loss_rate: 1,
   },
   tabaiba: {
-    energy_gain_rate: 0.18,
-    reproductive_energy_threshold: 2,
+    energy_gain_rate: 0.20,
+    reproductive_energy_threshold: 1.7,
     max_life: 20,
     life_dev: 5,
     seed_success: 0.01,
@@ -78,6 +79,7 @@ function preload() {
   glauca = loadImage("imgs/glauca.png");
   cardon = loadImage("imgs/cardon.png");
   tabaiba = loadImage("imgs/tabaiba.png");
+  setSliderDefaultValues();
 }
 
 function setup() {
@@ -124,7 +126,9 @@ function setup() {
   }
 
   // Initialize interface
-  setSliderDefaultValues();
+  if (initialized) {
+    setSliderDefaultValues();
+  }
   plotDataFraction(plantTypeData);
   sim_started = false;
   sim_reseted = false;
@@ -157,7 +161,7 @@ function draw() {
       noLoop();
     }
   }
-
+  console.log(plantParameters["glauca"]);
 }
 
 
@@ -336,6 +340,7 @@ function startSimulation() {
 }
 
 function resetSimulation() {
+  initialized  = false;
   let button = document.getElementById("start-button");
   button.innerHTML = "<i class='fas fa-play'></i>";
   setup();
@@ -350,25 +355,25 @@ function setSliderDefaultValues() {
 
 function updateNinitSliderText(value) {
   document.getElementById('ninit_slider_text').innerHTML = value;
-  n_plants_init.glauca = value;
+  n_plants_init.glauca = int(value);
   resetSimulation();
 }
 
 function updateDispersalSliderText(value) {
   document.getElementById('dispersal_slider_text').innerHTML = value;
-  plantParameters.glauca.max_seed_dispersal = value;
+  plantParameters.glauca.max_seed_dispersal = int(value);
   resetSimulation();
 }
 
 function updateSeedProductionSliderText(value) {
   document.getElementById('seed_production_slider_text').innerHTML = value;
-  plantParameters.glauca.max_seed_production = value;
+  plantParameters.glauca.max_seed_production = int(value);
   resetSimulation();
 }
 
 function updateRepEficiencySliderText(value) {
   document.getElementById('rep_eficiency_slider_text').innerHTML = value;
-  plantParameters.glauca.energy_gain_rate = value;
+  plantParameters.glauca.energy_gain_rate = float(value);
   resetSimulation();
 }
 
