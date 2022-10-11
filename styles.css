@@ -1,7 +1,7 @@
 :root{
   --canvasSideLength: 34vw;
   --plotWidth: 55vw;
-  --backgroundColor: rgb(8, 8, 8);
+  --backgroundColor: rgb(40, 40, 40);
     --fontColor: rgb(251, 251, 251);
   --fancyColor: rgb(238, 157, 0);
 }
