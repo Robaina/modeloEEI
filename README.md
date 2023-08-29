@@ -22,4 +22,4 @@ A medida que pasa el tiempo, las plantas de tabaiba, cardón y tabaco moro compi
 Para facilitar la interpretación de los datos, la aplicación web también cuenta con una gráfica que muestra la evolución temporal de las poblaciones de cada especie de planta en la cuadrícula (en forma de fracción sobre el total). Además, la aplicación dispone de cuatro controladores, en forma de “sliders”, para modificar cómodamente (pensado para ser usado en dispositivos táctiles) el valor de los cuatro parámetros que el alumnado puede controlar.
 
 ## Acceso a la aplicación
-https://semidanrobaina.com/modeloEEI/
+https://robaina.github.io/modeloEEI/
